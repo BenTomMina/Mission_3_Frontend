@@ -1,42 +1,104 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* General container */
+.appContainer {
+  max-width: 600px;
+  margin: 2rem auto;
+  font-family: Arial, sans-serif;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Start form */
+.startForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.startForm input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.startForm button {
+  padding: 0.6rem;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.card {
-  padding: 2em;
+.startForm button:hover {
+  background: #1e40af;
 }
 
-.read-the-docs {
-  color: #888;
+/* Interview box */
+.interviewBox {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.interviewBox h1 {
+  margin-top: 0;
+}
+
+/* Chat area */
+.chatBox {
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 0.5rem;
+  height: 250px;
+  overflow-y: auto;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Messages */
+.chatMessage {
+  max-width: 70%;
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  word-wrap: break-word;
+}
+
+.chatMessage.me {
+  align-self: flex-end;
+  background-color: #e0f2fe;
+  color: #075985;
+}
+
+.chatMessage.interviewer {
+  align-self: flex-start;
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+/* Input area */
+.inputArea {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.inputArea input {
+  flex-grow: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.inputArea button {
+  padding: 0.6rem 1rem;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.inputArea button:hover {
+  background: #15803d;
 }
