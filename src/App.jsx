@@ -28,7 +28,7 @@ function App() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             jobTitle: job,
-            userResponse: "",
+            userResponse: `Hi my name is ${name} and I am applying for the ${job} role.`,
           }),
         });
 
@@ -122,13 +122,12 @@ function App() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <button type="submit" disabled={questionIndex >= 7}>
+            <button type="submit" disabled={questionIndex >= 8}>
               Submit
             </button>
           </form>
         </div>
       )}
-      ;
     </div>
   );
 }
