@@ -49,7 +49,7 @@
   border: 1px solid #eee;
   border-radius: 6px;
   padding: 0.5rem;
-  height: 250px;
+  height: 300px;
   overflow-y: auto;
   margin: 1rem 0;
   display: flex;
@@ -101,4 +101,10 @@
 
 .inputArea button:hover {
   background: #15803d;
+}
+
+button:disabled {
+  background-color: #ccc; /* Light gray */
+  color: #888; /* Dim text */
+  cursor: not-allowed;
 }
