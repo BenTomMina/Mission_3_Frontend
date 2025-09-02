@@ -3,12 +3,14 @@ import "./App.css";
 
 function App() {
   const [name, setName] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
+  const [job, setJob] = useState("");
   const [interviewStart, setInterviewStart] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
+
   const chatBoxRef = useRef(null);
+  const BACKEND_URL = "http://localhost:3000/interview";
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -16,28 +18,34 @@ function App() {
     }
   }, [messages]);
 
-  // Predefined questions for testing
-  const questions = [
-    `Hi ${name}. Please tell me about yourself?`,
-    "Question 1",
-    "Question 2",
-    "Question 3",
-    "Question 4",
-    "Question 5",
-    "Question 6",
-    "Summary",
-  ];
-
-  const handleStart = (e) => {
+  const handleStart = async (e) => {
     e.preventDefault();
-    if (name.trim() && jobTitle.trim()) {
+    if (name.trim() && job.trim()) {
       setInterviewStart(true);
-      setMessages([{ role: "interviewer", text: questions[0] }]);
-      setQuestionIndex(0);
+      try {
+        const res = await fetch(BACKEND_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jobTitle: job,
+            userResponse: "",
+          }),
+        });
+
+        const data = await res.json();
+        if (data.response) {
+          setMessages([{ role: "interviewer", text: data.response }]);
+          setQuestionIndex(1);
+        }
+      } catch (err) {
+        setMessages([
+          { role: "interviewer", text: "Error connecting to server" },
+        ]);
+      }
     }
   };
 
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
@@ -45,16 +53,25 @@ function App() {
     setMessages(newMessages);
     setInput("");
 
-    // Next question (if available)
-    const nextIndex = questionIndex + 1;
-    if (nextIndex < questions.length) {
-      setTimeout(() => {
+    try {
+      const res = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobTitle: job, userResponse: input }),
+      });
+      const data = await res.json();
+      if (data.response) {
         setMessages([
           ...newMessages,
-          { role: "interviewer", text: questions[nextIndex] },
+          { role: "interviewer", text: data.response },
         ]);
-        setQuestionIndex(nextIndex);
-      }, 800);
+        setQuestionIndex(questionIndex + 1);
+      }
+    } catch (err) {
+      setMessages([
+        ...newMessages,
+        { role: "interviewer", text: "error connecting to server." },
+      ]);
     }
   };
 
@@ -73,8 +90,8 @@ function App() {
           <input
             type="text"
             placeholder="Job Title..."
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
+            value={job}
+            onChange={(e) => setJob(e.target.value)}
           />
           <button type="submit">Start Interview</button>
         </form>
@@ -83,7 +100,7 @@ function App() {
         <div className="interviewBox">
           <h1>AI Mock Interview</h1>
           <p>
-            <strong>Job Title:</strong> {jobTitle}
+            <strong>Job Title:</strong> {job}
           </p>
           <div className="chatBox" ref={chatBoxRef}>
             {messages.map((msg, i) => (
@@ -105,10 +122,7 @@ function App() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <button
-              type="submit"
-              disabled={questionIndex >= questions.length - 1}
-            >
+            <button type="submit" disabled={questionIndex >= 7}>
               Submit
             </button>
           </form>
