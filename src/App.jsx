@@ -29,6 +29,7 @@ function App() {
           body: JSON.stringify({
             jobTitle: job,
             userResponse: `Hi my name is ${name} and I am applying for the ${job} role.`,
+            name,
           }),
         });
 
@@ -57,7 +58,16 @@ function App() {
       const res = await fetch(BACKEND_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jobTitle: job, userResponse: input }),
+        // body: JSON.stringify({ jobTitle: job, userResponse: input, name }),
+        body: JSON.stringify({
+          jobTitle: job,
+          userResponse: input,
+          name,
+          history: newMessages.map((msg) => ({
+            role: msg.role === "me" ? "user" : "interviewer",
+            content: msg.text,
+          })),
+        }),
       });
       const data = await res.json();
       if (data.response) {
@@ -122,7 +132,7 @@ function App() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <button type="submit" disabled={questionIndex >= 8}>
+            <button type="submit" disabled={questionIndex >= 7}>
               Submit
             </button>
           </form>
