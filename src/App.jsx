@@ -8,7 +8,7 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [background, setBackground] = useState(""); // NEW
+  const [background, setBackground] = useState("");
 
   const chatBoxRef = useRef(null);
 
@@ -17,12 +17,14 @@ function App() {
   const INTERVIEW_URL = `${BACKEND_URL}/interview`;
   const BACKGROUND_URL = `${BACKEND_URL}/generate-background`;
 
+  // Automatically scrolls the chat to the latest message
   useEffect(() => {
     if (chatBoxRef.current) {
       chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // To trigger the star of the interview
   const handleStart = async (e) => {
     e.preventDefault();
     if (name.trim() && job.trim()) {
@@ -66,6 +68,7 @@ function App() {
     }
   };
 
+  // For sending messages to the interviewer
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -106,6 +109,7 @@ function App() {
   };
 
   return (
+    // Container to display the generated background image
     <div
       className="appBody"
       style={{
@@ -114,9 +118,10 @@ function App() {
         backgroundPosition: "center",
       }}
     >
+      {/* Overall container for the app */}
       <div className="appContainer">
         {!interviewStart ? (
-          // Input form
+          // Input form - inital display to prompt entry of name and job title
           <form className="startForm" onSubmit={handleStart}>
             <h1>AI Mock Interview</h1>
             <input
@@ -134,12 +139,13 @@ function App() {
             <button type="submit">Start Interview</button>
           </form>
         ) : (
-          // Interview UI
+          // Interview UI - changes to this once the interview has been started
           <div className="interviewBox">
             <h1>AI Mock Interview</h1>
-            <p>
+            <h4>
               <strong>Job Title:</strong> {job}
-            </p>
+            </h4>
+            {/* Displays all the messages between the interviewer and user */}
             <div className="chatBox" ref={chatBoxRef}>
               {messages.map((msg, i) => (
                 <div
@@ -153,12 +159,14 @@ function App() {
               ))}
             </div>
 
+            {/* Entry point for the userResponse */}
             <form className="inputArea" onSubmit={handleSend}>
               <textarea
                 placeholder="Response..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 rows={3}
+                // Enables hitting the "enter" key to send rather than moving to the next line
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -166,7 +174,8 @@ function App() {
                   }
                 }}
               />
-              <button type="submit" disabled={questionIndex >= 8}>
+              {/* Disables message submission once interview ends */}
+              <button type="submit" disabled={questionIndex >= 7}>
                 Submit
               </button>
             </form>
