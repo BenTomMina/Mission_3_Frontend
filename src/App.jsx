@@ -126,13 +126,19 @@ function App() {
           </div>
 
           <form className="inputArea" onSubmit={handleSend}>
-            <input
-              type="text"
+            <textarea
               placeholder="Response..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              rows={3}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend(e);
+                }
+              }}
             />
-            <button type="submit" disabled={questionIndex >= 7}>
+            <button type="submit" disabled={questionIndex >= 8}>
               Submit
             </button>
           </form>
