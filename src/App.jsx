@@ -137,9 +137,9 @@ function App() {
           // Interview UI
           <div className="interviewBox">
             <h1>AI Mock Interview</h1>
-            <p>
+            <h4>
               <strong>Job Title:</strong> {job}
-            </p>
+            </h4>
             <div className="chatBox" ref={chatBoxRef}>
               {messages.map((msg, i) => (
                 <div
