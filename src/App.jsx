@@ -166,7 +166,7 @@ function App() {
                   }
                 }}
               />
-              <button type="submit" disabled={questionIndex >= 8}>
+              <button type="submit" disabled={questionIndex >= 7}>
                 Submit
               </button>
             </form>
