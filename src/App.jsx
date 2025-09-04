@@ -8,9 +8,14 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [background, setBackground] = useState(""); // NEW
 
   const chatBoxRef = useRef(null);
-  const BACKEND_URL = "http://localhost:3000/interview";
+
+  // ✅ Backend URLs
+  const BACKEND_URL = "http://localhost:3000";
+  const INTERVIEW_URL = `${BACKEND_URL}/interview`;
+  const BACKGROUND_URL = `${BACKEND_URL}/generate-background`;
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -22,8 +27,23 @@ function App() {
     e.preventDefault();
     if (name.trim() && job.trim()) {
       setInterviewStart(true);
+
+      // 🔹 Generate background
       try {
-        const res = await fetch(BACKEND_URL, {
+        const bgRes = await fetch(BACKGROUND_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ jobTitle: job }),
+        });
+        const bgData = await bgRes.json();
+        if (bgData.imageUrl) setBackground(bgData.imageUrl);
+      } catch (err) {
+        console.error("Background generation failed:", err);
+      }
+
+      // 🔹 Start Interview
+      try {
+        const res = await fetch(INTERVIEW_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -55,7 +75,7 @@ function App() {
     setInput("");
 
     try {
-      const res = await fetch(BACKEND_URL, {
+      const res = await fetch(INTERVIEW_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // body: JSON.stringify({ jobTitle: job, userResponse: input, name }),
@@ -86,64 +106,73 @@ function App() {
   };
 
   return (
-    <div className="appContainer">
-      {!interviewStart ? (
-        // Input form
-        <form className="startForm" onSubmit={handleStart}>
-          <h1>AI Mock Interview</h1>
-          <input
-            type="text"
-            placeholder="Name..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Job Title..."
-            value={job}
-            onChange={(e) => setJob(e.target.value)}
-          />
-          <button type="submit">Start Interview</button>
-        </form>
-      ) : (
-        // Interview UI
-        <div className="interviewBox">
-          <h1>AI Mock Interview</h1>
-          <p>
-            <strong>Job Title:</strong> {job}
-          </p>
-          <div className="chatBox" ref={chatBoxRef}>
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`chatMessage ${
-                  msg.role === "me" ? "me" : "interviewer"
-                }`}
-              >
-                <p>{msg.text}</p>
-              </div>
-            ))}
-          </div>
-
-          <form className="inputArea" onSubmit={handleSend}>
-            <textarea
-              placeholder="Response..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              rows={3}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend(e);
-                }
-              }}
+    <div
+      className="appBody"
+      style={{
+        backgroundImage: background ? `url(${background})` : "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="appContainer">
+        {!interviewStart ? (
+          // Input form
+          <form className="startForm" onSubmit={handleStart}>
+            <h1>AI Mock Interview</h1>
+            <input
+              type="text"
+              placeholder="Name..."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-            <button type="submit" disabled={questionIndex >= 8}>
-              Submit
-            </button>
+            <input
+              type="text"
+              placeholder="Job Title..."
+              value={job}
+              onChange={(e) => setJob(e.target.value)}
+            />
+            <button type="submit">Start Interview</button>
           </form>
-        </div>
-      )}
+        ) : (
+          // Interview UI
+          <div className="interviewBox">
+            <h1>AI Mock Interview</h1>
+            <p>
+              <strong>Job Title:</strong> {job}
+            </p>
+            <div className="chatBox" ref={chatBoxRef}>
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`chatMessage ${
+                    msg.role === "me" ? "me" : "interviewer"
+                  }`}
+                >
+                  <p>{msg.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <form className="inputArea" onSubmit={handleSend}>
+              <textarea
+                placeholder="Response..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                rows={3}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend(e);
+                  }
+                }}
+              />
+              <button type="submit" disabled={questionIndex >= 8}>
+                Submit
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
