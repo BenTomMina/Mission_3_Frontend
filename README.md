@@ -1,12 +1,57 @@
-# React + Vite
+# Welcome to **Mission 3** 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+A React frontend service for a mock job interview. GIves the user an intuitive interface to use and access the backend application powered by Google Gemini. This app starts with the name and job title being applied for then proceeds to conduct an interview via chat:
 
-Currently, two official plugins are available:
+- The display starts with a request for a name and job title
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Once filled it starts the interview conversation by asking the user about themself
 
-## Expanding the ESLint configuration
+- The user will then respond to the questions. After each answer another question will be asked
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- At the end, the user receives feedback on their performance and suggestions for improvement.
+
+#### Tech Stack
+
+- React
+- HTML
+- CSS
+
+
+#### Future Enhancements
+
+- Improve message readability
+- Add visual prompts to tell user that the app is loading
+- Add a reset button to start a new chat rather than having to refresh the page
+
+#### Setup Instruction:
+
+**Clone the repository**
+
+```bash
+git clone <repo-url>
+cd Mission_3_Frontend
+```
+
+**Install dependencies**
+
+```bash
+npm install
+```
+
+**Getting started**
+
+```
+npm run dev
+```
+
+Don't forget to download the backend as well from: [Backend](https://github.com/christinemr/L5-Mission3-backend.git)
+
+---
+
+
+#### 👩🏻‍💻🧑🏻‍💻👨🏻‍💻 Dev mode vibes
+
+Please sit back and relax while Gemini does the interviewing...
+
+<img src="public/READMEimages/mission3.png" alt="meme" width="450"/>
